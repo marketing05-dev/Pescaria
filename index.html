@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Acompanhamento - Rota Rancho</title>
+    <title>Rota Premiada - Rancho Pabu</title>
     <style>
         :root {
             --river-empty: #0b1a2e; 
@@ -22,122 +22,152 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
         body {
-            background-image: url('https://blogserlider.wordpress.com/wp-content/uploads/2026/09/video-rancho-pabu-gif.gif');
-            background-size: cover; background-position: center; background-attachment: fixed;
-            background-color: #001f44; color: var(--white); min-height: 100vh;
-            display: flex; flex-direction: column; overflow-x: hidden;
+            min-height: 100vh; display: flex; flex-direction: column;
+            margin: 0; background-color: #001f44; overflow-x: hidden;
+            color: var(--white);
         }
 
-        /* --- Cabeçalho (Header) --- */
-        .main-header {
-            background-color: var(--white); padding: 15px 50px; display: flex;
-            justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc;
-            z-index: 1000; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.3); flex-wrap: wrap; gap: 15px;
+        /* --- Fundo de Vídeo e Overlay (Fixos) --- */
+        .video-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://blogserlider.wordpress.com/wp-content/uploads/2026/09/video-rancho-pabu-gif.gif');
+            background-size: cover; background-position: center; z-index: -2;
         }
-        .header-logo { height: 40px; }
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 31, 68, 0.4); backdrop-filter: blur(5px); z-index: -1;
+        }
+
+        /* ========================================= */
+        /*          TELA DE ACESSO INICIAL           */
+        /* ========================================= */
+        #loginArea {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            padding: 50px 20px; z-index: 10; transition: opacity 0.5s ease;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95); width: 100%; max-width: 850px; 
+            border-radius: 20px; display: flex; overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); border: 3px solid var(--orange);
+        }
+
+        .login-left {
+            flex: 1; background: var(--text-blue); padding: 40px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+        }
+        .login-logo { width: 220px; filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.5)); margin-bottom: 20px; z-index: 2;}
+
+        .mini-river-box { position: relative; width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; margin-top: 10px;}
+        .mini-river-svg { width: 100%; height: 100%; position: absolute;}
         
+        .mini-boat { position: absolute; filter: drop-shadow(2px 5px 4px rgba(0,0,0,0.5)); animation: sailMiniRiver 7s linear infinite; }
+        .float-boat { font-size: 35px; display: inline-block; animation: floatBoatIntense 1s ease-in-out infinite alternate; }
+
+        @keyframes sailMiniRiver {
+            0% { left: 10%; transform: scaleX(-1); }   
+            49% { left: 75%; transform: scaleX(-1); }  
+            50% { left: 75%; transform: scaleX(1); }   
+            99% { left: 10%; transform: scaleX(1); }   
+            100% { left: 10%; transform: scaleX(-1); } 
+        }
+        @keyframes floatBoatIntense { 0% { transform: translateY(0px) rotate(-4deg); } 100% { transform: translateY(-8px) rotate(4deg); } }
+
+        .login-right { flex: 1; padding: 50px 40px; display: flex; flex-direction: column; justify-content: center; text-align: center;}
+        .login-right h2 { color: var(--orange); font-size: 32px; line-height: 1.2; margin-bottom: 10px; }
+        .login-right p { color: var(--text-blue); font-weight: 600; margin-bottom: 25px; font-size: 15px;}
+
+        .fake-inputs { margin-bottom: 20px; text-align: left; }
+        .fake-inputs label { display: block; color: var(--text-blue); font-size: 13px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;}
+        .fake-inputs input { width: 100%; padding: 12px 15px; border: 2px solid #ccc; border-radius: 20px; margin-bottom: 15px; font-size: 14px; color: var(--text-blue); background: #f9f9f9; outline: none; }
+
+        .btn-embarcar { 
+            background: var(--orange); color: var(--white); border: none; padding: 18px 30px; 
+            border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; 
+            width: 100%; transition: all 0.3s; box-shadow: 0 5px 15px rgba(255, 106, 19, 0.4); 
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;
+        }
+        .btn-embarcar:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 106, 19, 0.6); }
+        .btn-embarcar:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; color: #666; }
+
+        .status-msg { text-align: center; font-size: 14px; font-weight: bold; min-height: 20px; color: var(--white);}
+        .csv-upload-container { display: none; margin-top: 15px; text-align: center; }
+        .csv-upload-btn { display: inline-block; background-color: #facc15; color: #111; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 14px; cursor: pointer; border: 2px solid #333; transition: transform 0.2s; }
+        .csv-upload-btn:hover { transform: scale(1.05); }
+
+        /* ========================================= */
+        /*          DASHBOARD AREA (MAPA)            */
+        /* ========================================= */
+        #dashboardArea { display: none; flex-direction: column; width: 100%; flex: 1; opacity: 0; transition: opacity 0.5s ease; z-index: 10;}
+
+        .main-header { background-color: var(--white); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; box-shadow: 0 4px 10px rgba(0,0,0,0.3); flex-wrap: wrap; gap: 15px; }
+        .header-logo { height: 40px; }
         .header-info { display: flex; align-items: center; gap: 15px; color: var(--text-blue); font-size: 14px; font-weight: bold; flex-wrap: wrap; justify-content: center;}
         
-        /* Barra de Seleção do Cliente */
-        .client-search { display: flex; align-items: center; gap: 5px; background: #f0f0f0; padding: 5px 15px; border-radius: 20px; border: 1px solid #ccc;}
-        .client-search select { border: none; background: transparent; outline: none; font-size: 14px; font-weight: bold; color: var(--text-blue); width: 160px; cursor: pointer;}
+        .custom-search { position: relative; display: flex; align-items: center; gap: 5px; background: #f0f0f0; padding: 5px 15px; border-radius: 20px; border: 1px solid #ccc;}
+        .custom-search input { border: none; background: transparent; outline: none; font-size: 14px; font-weight: bold; color: var(--text-blue); width: 180px;}
+        .custom-search input::placeholder { color: #999; font-weight: normal;}
         
-        .logout-btn { border: 1px solid #ccc; padding: 5px 15px; border-radius: 15px; background: white; cursor: pointer; color: #888; font-size: 12px; font-weight: bold; }
-
-        /* --- Conteúdo Principal --- */
-        .main-content {
-            flex: 1; display: flex; flex-direction: column; align-items: center;
-            padding-top: 40px; padding-bottom: 100px; background: rgba(0, 31, 68, 0.75); width: 100%;
+        .autocomplete-list {
+            position: absolute; top: calc(100% + 5px); left: 0; width: 100%; background: #fff;
+            border: 1px solid #ccc; border-radius: 8px; max-height: 250px; overflow-y: auto;
+            list-style: none; padding: 0; margin: 0; z-index: 9999; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
+        .autocomplete-list li { padding: 10px 15px; cursor: pointer; color: var(--text-blue); font-size: 13px; font-weight: bold; border-bottom: 1px solid #eee; text-align: left;}
+        .autocomplete-list li:hover { background: #f4f4f4; color: var(--orange); }
 
-        /* --- Seção de Introdução --- */
-        .intro-section {
-            display: flex; justify-content: space-between; align-items: center; width: 100%;
-            max-width: 1200px; margin-bottom: 30px; padding: 0 40px; z-index: 20; gap: 20px;
-        }
-        .rota-logo { width: 250px; filter: drop-shadow(0px 8px 15px rgba(0,0,0,0.8)); }
-        .intro-text h1 { font-size: 28px; line-height: 1.3; text-shadow: 2px 2px 8px rgba(0,0,0,0.9); text-align: right; }
-        .intro-text h1 strong { color: var(--orange); font-size: 34px; }
+        .logout-btn { border: 1px solid #ccc; padding: 5px 15px; border-radius: 15px; background: white; cursor: pointer; color: var(--alert-red); font-size: 12px; font-weight: bold; transition: background 0.2s;}
+        .logout-btn:hover { background: #fce8e8; }
 
-        /* --- UI Flutuante: Seletor de Meses --- */
-        .month-selector { position: fixed; bottom: 200px; left: 20px; text-align: left; z-index: 1000; width: 220px; }
-        .month-selector p { font-size: 13px; margin-bottom: 12px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); font-weight: bold; line-height: 1.3;}
-        .month-buttons { display: flex; flex-direction: column; gap: 8px; } 
-        .month-btn {
-            background: rgba(0, 0, 0, 0.6); color: var(--white); border: 2px solid var(--orange);
-            padding: 10px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(5px);
-        }
-        .month-btn.active, .month-btn:hover { background: var(--orange); box-shadow: 0 4px 10px rgba(255, 106, 19, 0.4); transform: translateX(5px); }
-
-        /* --- Placa de Madeira Fixa na Tela --- */
         .street-sign { position: fixed; bottom: 30px; left: 0px; z-index: 1000; display: flex; transform: scale(0.9); transform-origin: left bottom;}
         .sign-pole { width: 18px; height: 180px; background: var(--wood-dark); border-radius: 5px; border: 2px solid #3d250e; position: absolute; left: 15px; top: -10px; box-shadow: inset -3px 0 5px rgba(0,0,0,0.5), 5px 5px 10px rgba(0,0,0,0.6);}
         .sign-board { background: var(--wood-light); border: 3px solid var(--wood-dark); border-radius: 8px; padding: 12px 20px; margin-left: 35px; margin-top: 20px; position: relative; width: 220px; box-shadow: 0 8px 15px rgba(0,0,0,0.6), inset 0 0 10px rgba(0,0,0,0.2);}
         .sign-board p { font-size: 11px; color: #f0e6d2; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;}
         .sign-board h3 { font-size: 24px; color: var(--white); text-shadow: 1px 1px 3px rgba(0,0,0,0.8);}
 
-        /* --- Container Principal do Mapa --- */
-        .map-container { 
-            position: relative; width: 100%; max-width: 1200px; 
-            aspect-ratio: 1200 / 900; z-index: 10; margin: 0 auto;
-        }
+        .main-content { flex: 1; display: flex; flex-direction: column; align-items: center; padding-top: 40px; padding-bottom: 40px; background: rgba(0, 31, 68, 0.75); width: 100%; }
+        
+        .intro-section { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin-bottom: 30px; padding: 0 40px; z-index: 20; gap: 20px; }
+        .rota-logo { width: 250px; filter: drop-shadow(0px 8px 15px rgba(0,0,0,0.8)); flex-shrink: 0;}
+        .intro-text h1 { font-size: 28px; line-height: 1.3; text-shadow: 2px 2px 8px rgba(0,0,0,0.9); text-align: right; color: var(--white); }
+        .intro-text h1 strong { color: var(--orange); font-size: 34px; }
 
-        /* --- UI Flutuante (Caixa de Progresso) --- */
-        .progress-box {
-            position: absolute; top: 0px; left: 10px; background: var(--white); padding: 15px 25px; border-radius: 12px;
-            display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); z-index: 20;
-            border-bottom: 5px solid var(--orange); transition: border-color 0.3s;
-        }
+        .month-selector { position: fixed; bottom: 200px; left: 20px; text-align: left; z-index: 1000; width: 220px; }
+        .month-selector p { font-size: 13px; margin-bottom: 12px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); font-weight: bold; line-height: 1.3; color: var(--white);}
+        .month-buttons { display: flex; flex-direction: column; gap: 8px; } 
+        .month-btn { background: rgba(0, 0, 0, 0.6); color: var(--white); border: 2px solid var(--orange); padding: 10px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(5px); }
+        .month-btn.active, .month-btn:hover { background: var(--orange); box-shadow: 0 4px 10px rgba(255, 106, 19, 0.4); transform: translateX(5px); }
+
+        .map-container { position: relative; width: 100%; max-width: 1200px; aspect-ratio: 1200 / 900; z-index: 10; margin: 0 auto; }
+
+        .progress-box { position: absolute; top: 0px; left: 10px; background: var(--white); padding: 15px 25px; border-radius: 12px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); z-index: 20; border-bottom: 5px solid var(--orange); transition: border-color 0.3s; }
         .progress-box-texts p { color: #888; font-size: 13px; margin-bottom: -5px; font-weight: bold;}
         .progress-box-texts h2 { color: var(--orange); font-size: 40px; font-weight: bold; transition: color 0.3s;} 
         .progress-icon { background: var(--text-blue); color: var(--orange); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: background 0.3s, color 0.3s;}
 
-        /* --- O Trajeto do Rio (SVG) --- */
-        .svg-path { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            pointer-events: none; z-index: 1; filter: drop-shadow(0px 15px 30px rgba(0,0,0,0.9)); 
-        }
-        .river-progress { stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 0.8s ease-in-out;}
+        .svg-path { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; filter: drop-shadow(0px 15px 30px rgba(0,0,0,0.9)); }
+        .river-progress { stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1s ease-in-out;}
 
-        /* --- Nós e Ícones --- */
-        .node { 
-            position: absolute; z-index: 15; transform: translate(-50%, -50%); 
-            display: flex; flex-direction: column; align-items: center; transition: all 0.5s;
-        }
-        
-        .node-icon {
-            width: 65px; height: 65px; background: var(--text-blue); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 30px; 
-            box-shadow: 0 6px 12px rgba(0,0,0,0.7); border: 3px solid var(--orange); 
-            position: relative; z-index: 2; transition: all 0.5s;
-        }
-
-        .node-text { 
-            position: absolute; width: 220px; font-size: 13px; line-height: 1.4; 
-            color: #fff; text-shadow: 2px 2px 5px rgba(0,0,0,1); font-weight: 500; transition: all 0.5s;
-        }
+        .node { position: absolute; z-index: 15; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; transition: all 0.5s; }
+        .node-icon { width: 65px; height: 65px; background: var(--text-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 6px 12px rgba(0,0,0,0.7); border: 3px solid var(--orange); position: relative; z-index: 2; transition: all 0.5s; }
+        .node-text { position: absolute; width: 220px; font-size: 13px; line-height: 1.4; color: #fff; text-shadow: 2px 2px 5px rgba(0,0,0,1); font-weight: 500; transition: all 0.5s; }
         .node-text a { color: var(--orange); text-decoration: none; border-bottom: 1px solid var(--orange); font-weight: bold;}
         
         .txt-up { bottom: calc(100% + 15px); text-align: center; }
         .txt-up::after { content: ''; position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 2px; height: 15px; background: var(--orange); transition: background 0.5s;}
-        
         .txt-down { top: calc(100% + 15px); text-align: center; }
         .txt-down::before { content: ''; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 2px; height: 15px; background: var(--orange); transition: background 0.5s;}
-
         .txt-left { right: calc(100% + 20px); top: 50%; transform: translateY(-50%); text-align: right; }
         .txt-left::after { content: ''; position: absolute; top: 50%; right: -20px; transform: translateY(-50%); width: 20px; height: 2px; background: var(--orange); transition: background 0.5s;}
-        
         .txt-right { left: calc(100% + 20px); top: 50%; transform: translateY(-50%); text-align: left; }
         .txt-right::before { content: ''; position: absolute; top: 50%; left: -20px; transform: translateY(-50%); width: 20px; height: 2px; background: var(--orange); transition: background 0.5s;}
 
-        /* Efeito de Nó Bloqueado */
         .locked-node { filter: grayscale(100%) opacity(0.6); }
         .locked-node .node-icon { border-color: var(--locked-gray); background: #222;}
         .locked-node .node-text { color: #aaa; text-shadow: 1px 1px 3px #000; }
         .locked-node .node-text strong { color: #ccc; }
         .locked-node .node-text::before, .locked-node .node-text::after { background: var(--locked-gray); }
 
-        /* Coordenadas Exatas (%) */
         .n-start { left: 83.33%; top: 16.66%; }
         .n-start .node-icon { width: 65px; height: 65px; background: #fff; font-size: 35px; border: 4px solid #ccc; color: #333;}
         .n1 { left: 45.83%; top: 16.66%; }
@@ -149,20 +179,16 @@
         .n-end { left: 75%; top: 83.33%; }
         .n-end .node-icon { width: 90px; height: 90px; font-size: 50px; border: 4px solid var(--locked-gray); box-shadow: none; }
         .n-end .node-text { top: 100%; left: 50%; transform: translateX(-50%); margin-top: 15px; width: 240px; font-size: 16px; font-weight: bold; text-align: center;}
-        
         .n-end:not(.locked-node) .node-icon { border-color: #fff; background: var(--orange); box-shadow: 0 0 30px rgba(255, 106, 19, 0.8);}
         .n-end:not(.locked-node) .node-text { color: #fff; text-shadow: 2px 2px 8px #000;}
 
         /* --- O BARCO E O ALERTA --- */
         .boat-container {
-            position: absolute; z-index: 30;
-            left: 83.33%; top: 16.66%; 
-            transform: translate(-50%, -50%);
+            position: absolute; z-index: 30; left: 83.33%; top: 16.66%; transform: translate(-50%, -50%);
             transition: left 0.8s ease-in-out, top 0.8s ease-in-out; 
         }
-
         .boat-animator { animation: floatBoatIntense 2s ease-in-out infinite alternate; }
-        .boat-graphic { font-size: 70px; filter: drop-shadow(5px 10px 8px rgba(0,0,0,0.7)); transform: scaleX(-1); transition: transform 0.2s ease-in-out; }
+        .boat-graphic { font-size: 70px; filter: drop-shadow(5px 10px 8px rgba(0,0,0,0.7)); transform: scaleX(-1); transition: transform 0.3s ease-in-out; }
 
         @keyframes floatBoatIntense {
             0% { transform: translateY(0px) rotate(-4deg); }
@@ -175,20 +201,137 @@
             color: #cbd5e1; padding: 12px 15px; border-radius: 8px; width: 270px;
             font-size: 13px; line-height: 1.4; border-left: 4px solid var(--orange);
             backdrop-filter: blur(4px); box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            animation: pulseAlert 2s infinite alternate; pointer-events: none;
-            transition: border-color 0.3s, background 0.3s;
+            animation: pulseAlert 2s infinite alternate; pointer-events: none; transition: border-color 0.3s, background 0.3s;
         }
-        .warning-alert::after {
-            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-            border-width: 8px; border-style: solid; border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent;
-        }
+        .warning-alert::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 8px; border-style: solid; border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent; }
         .warning-alert strong { color: #facc15; }
         @keyframes pulseAlert { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.05); } }
+
+
+        /* ========================================= */
+        /*    NOVAS SEÇÕES: PARCEIROS E REGULAMENTO  */
+        /* ========================================= */
+        
+        .partners-section {
+            background-color: var(--orange); width: 100%; padding: 40px 20px;
+            display: flex; justify-content: center; z-index: 10; position: relative;
+        }
+        .partners-container {
+            max-width: 1200px; width: 100%; display: flex; align-items: center; gap: 40px;
+        }
+        .partners-title {
+            color: var(--white); font-size: 20px; line-height: 1.2;
+            text-align: right; min-width: 250px; text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        .partners-title strong { font-size: 28px; display: block;}
+        
+        /* Carrossel CSS Animation (Infinito) */
+        .carousel-wrapper {
+            flex: 1; display: flex; align-items: center; overflow: hidden;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
+        }
+        .carousel-track-container {
+            overflow: hidden; width: 100%;
+        }
+        .carousel-track {
+            display: flex; width: max-content;
+            animation: scrollLoop 35s linear infinite;
+        }
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+        .partner-list {
+            display: flex; gap: 20px; list-style: none; padding: 10px 0; margin: 0; padding-right: 20px;
+        }
+        @keyframes scrollLoop {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .partner-card {
+            background: #ffb480; border-radius: 15px; padding: 25px 20px; width: 180px; flex-shrink: 0;
+            display: flex; flex-direction: column; align-items: center;
+            text-decoration: none; transition: transform 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .partner-card:hover { transform: translateY(-5px); }
+        .partner-logo-box {
+            width: 100%; height: 80px; background: #333; border-radius: 10px; margin-bottom: 20px; 
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .partner-logo-box img { max-width: 80%; max-height: 80%; object-fit: contain; }
+        .btn-partner {
+            border: 2px solid var(--text-blue); color: var(--text-blue); padding: 8px 15px; 
+            border-radius: 20px; font-size: 13px; font-weight: bold; transition: all 0.3s;
+        }
+        .partner-card:hover .btn-partner { background: var(--text-blue); color: var(--white); }
+
+        .rules-section {
+            background-color: transparent; width: 100%; padding: 60px 20px; display: flex; 
+            justify-content: center; z-index: 10; position: relative;
+        }
+        .rules-container {
+            max-width: 800px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 40px;
+        }
+        .rules-logo { width: 180px; filter: drop-shadow(0px 8px 10px rgba(0,0,0,0.5)); }
+        .rules-text { color: var(--white); font-size: 22px; line-height: 1.4; font-weight: 500;}
+        .rules-text a { color: var(--white); font-weight: bold; text-decoration: underline; cursor: pointer; transition: color 0.2s;}
+        .rules-text a:hover { color: var(--orange); }
+
+        /* Modal do Regulamento Completo */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 20, 45, 0.9); z-index: 9999;
+            display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background: var(--white); width: 95%; max-width: 1100px; max-height: 85vh; border-radius: 15px; 
+            padding: 40px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; gap: 30px;
+        }
+        .modal-video {
+            flex: 1.2; border-radius: 10px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #000;
+        }
+        .modal-video img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-text-content { flex: 1.5; display: flex; flex-direction: column; }
+        .close-modal {
+            position: absolute; top: 15px; right: 20px; font-size: 30px; font-weight: bold; color: var(--text-blue); cursor: pointer; transition: color 0.2s;
+        }
+        .close-modal:hover { color: var(--alert-red); }
+        .modal-text-content h2 { color: var(--orange); margin-bottom: 20px; font-size: 24px;}
+        .modal-text-body { color: #444; font-size: 14px; line-height: 1.6; overflow-y: auto; padding-right: 15px; }
+        .modal-text-body p { margin-bottom: 15px; }
+
+        /* ========================================= */
+        /*          RODAPÉ OFICIAL (FOOTER)          */
+        /* ========================================= */
+        .site-footer {
+            background-color: #f4f4f4; border-top: 12px solid var(--text-blue);
+            padding: 40px 10%; display: flex; justify-content: space-between; align-items: flex-end;
+            z-index: 10; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 100%; position: relative; margin-top: auto;
+        }
+        .footer-left { display: flex; flex-direction: column; gap: 15px;}
+        .footer-title { color: var(--orange); font-weight: 800; text-transform: uppercase; font-size: 14px; margin-bottom: -5px; letter-spacing: 0.5px;}
+        .footer-bold { color: #000; font-weight: 800; font-size: 15px; }
+        .footer-text { color: #555; font-size: 14px; line-height: 1.5; font-weight: 400;}
+        .footer-bottom-row { display: flex; align-items: flex-end; gap: 50px; margin-top: 10px;}
+        .social-icons { display: flex; gap: 12px; margin-bottom: 2px;}
+        .social-circle { width: 32px; height: 32px; background-color: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; }
+        .social-circle:hover { transform: scale(1.1); }
+        .footer-right { text-align: right; }
 
         /* ========================================= */
         /*          RESPONSIVIDADE (CELULAR)         */
         /* ========================================= */
         @media (max-width: 1024px) {
+            .login-box { flex-direction: column; width: 95%; max-height: none;}
+            .login-left { padding: 30px 20px; }
+            .login-logo { width: 160px; margin-bottom: 10px;}
+            .mini-river-box { height: 80px; margin-top: 0;}
+            .float-boat { font-size: 28px; }
+            .login-right { padding: 30px 20px; text-align: center;}
+            .login-right h2 { font-size: 24px; }
+            
             .main-header { padding: 15px 20px; justify-content: center;}
             .intro-section { flex-direction: column; padding: 0 20px; text-align: center; margin-bottom: 15px;}
             .intro-text h1 { text-align: center; font-size: 20px; }
@@ -221,126 +364,426 @@
             .n1 .node-text::after, .n3 .node-text::after, .n-meta .node-text::after { content: ''; display: block !important; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 2px; height: 5px; background: var(--orange); }
 
             .warning-alert { width: 180px; font-size: 10px; padding: 8px; margin-bottom: 20px;}
+
+            /* Ajustes Mobile Parceiros e Regras */
+            .partners-container { flex-direction: column; text-align: center; gap: 20px; }
+            .partners-title { text-align: center; }
+            .rules-container { flex-direction: column; text-align: center; gap: 20px; }
+            .rules-logo { width: 140px; }
+            .rules-text { font-size: 18px; }
+
+            .modal-content { flex-direction: column; padding: 20px; }
+            .modal-video { display: none; /* Esconde vídeo no celular para economizar espaço */ }
+
+            /* Rodapé Mobile */
+            .site-footer { flex-direction: column; align-items: center; text-align: center; gap: 30px; padding: 30px 20px; }
+            .footer-left { align-items: center; }
+            .footer-bottom-row { flex-direction: column; align-items: center; gap: 20px;}
+            .footer-right { text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <header class="main-header">
-        <img src="https://blogserlider.wordpress.com/wp-content/uploads/2026/05/2cores_composto.png" alt="Pacaembu Autopeças" class="header-logo">
-        <div class="header-info">
+    <!-- Fundo de vídeo fixo com máscara mais leve (0.4) -->
+    <div class="video-bg"></div>
+    <div class="overlay"></div>
+
+    <!-- ========================================= -->
+    <!--          TELA DE ACESSO INICIAL           -->
+    <!-- ========================================= -->
+    <div id="loginArea">
+        <div class="login-box">
             
-            <div class="client-search">
-                <span>🔍</span>
-                <select id="clientSelect">
-                    <option value="">Selecione ou digite um Código...</option>
-                </select>
-            </div>
-            
-            <span id="clientNameDisplay">🎧 RAZÃO SOCIAL DO CLIENTE</span>
-            <span>👤</span>
-            <button class="logout-btn">SAIR X</button>
-        </div>
-    </header>
-
-    <div class="street-sign">
-        <div class="sign-pole"></div>
-        <div class="sign-board">
-            <p><span>📍</span> Você está navegando em</p>
-            <h3>Outubro</h3>
-        </div>
-    </div>
-
-    <div class="main-content">
-        
-        <div class="intro-section">
-            <img src="https://blogserlider.wordpress.com/wp-content/uploads/2026/09/logo-rota-rancho.png" alt="Rota Premiada - Rancho Pabu" class="rota-logo">
-            <div class="intro-text">
-                <h1>Prepare sua tralha de pesca para uma experiência exclusiva!<br>Avance com suas compras e garanta sua vaga no <strong>Rancho da Pabu</strong>. Uma experiência direto com nossa diretoria!</h1>
-            </div>
-        </div>
-
-        <div class="month-selector">
-            <p>Escolha seu mês para acompanhar o trajeto:</p>
-            <div class="month-buttons">
-                <button class="month-btn active">Outubro</button>
-                <button class="month-btn">Novembro</button>
-                <button class="month-btn">Dezembro</button>
-            </div>
-        </div>
-
-        <!-- CONTAINER DO MAPA -->
-        <div class="map-container">
-            
-            <div class="progress-box">
-                <div class="progress-box-texts">
-                    <p>Seu progresso atual:</p>
-                    <h2 id="progText">0 %</h2>
+            <div class="login-left">
+                <img src="https://blogserlider.wordpress.com/wp-content/uploads/2026/09/logo-rota-rancho.png" alt="Rota Premiada" class="login-logo">
+                <div class="mini-river-box">
+                    <svg class="mini-river-svg" viewBox="0 0 300 120">
+                        <path d="M 0 60 Q 75 0 150 60 T 300 60" fill="none" stroke="var(--river-bank)" stroke-width="25" stroke-linecap="round"/>
+                        <path d="M 0 60 Q 75 0 150 60 T 300 60" fill="none" stroke="var(--river-filled)" stroke-width="15" stroke-linecap="round"/>
+                        <path d="M 0 60 Q 75 0 150 60 T 300 60" fill="none" stroke="var(--river-light)" stroke-width="5" stroke-linecap="round" opacity="0.5"/>
+                    </svg>
+                    <div class="mini-boat"><div class="float-boat">🛥️</div></div>
                 </div>
-                <div class="progress-icon" id="progIcon">🐟</div>
             </div>
-
-            <!-- SVG do Rio -->
-            <svg class="svg-path" viewBox="0 0 1200 900">
-                <path id="mainRiverPath" d="M 1000 150 L 300 150 A 100 100 0 0 0 200 250 A 100 100 0 0 0 300 350 L 900 350 A 100 100 0 0 1 1000 450 A 100 100 0 0 1 900 550 L 300 550 A 100 100 0 0 0 200 650 A 100 100 0 0 0 300 750 L 900 750" fill="none" stroke="var(--river-bank)" stroke-width="45" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M 1000 150 L 300 150 A 100 100 0 0 0 200 250 A 100 100 0 0 0 300 350 L 900 350 A 100 100 0 0 1 1000 450 A 100 100 0 0 1 900 550 L 300 550 A 100 100 0 0 0 200 650 A 100 100 0 0 0 300 750 L 900 750" fill="none" stroke="var(--river-empty)" stroke-width="35" stroke-linecap="round" stroke-linejoin="round"/>
+            
+            <div class="login-right">
+                <h2>Bem-vindo à Rota!</h2>
+                <p>O painel oficial de acompanhamento da campanha Rancho da Pabu.</p>
                 
-                <path id="riverFill" class="river-progress" pathLength="100" d="M 1000 150 L 300 150 A 100 100 0 0 0 200 250 A 100 100 0 0 0 300 350 L 900 350 A 100 100 0 0 1 1000 450 A 100 100 0 0 1 900 550 L 300 550 A 100 100 0 0 0 200 650 A 100 100 0 0 0 300 750 L 900 750" fill="none" stroke="var(--river-filled)" stroke-width="35" stroke-linecap="round" stroke-linejoin="round"/>
-                <path id="riverShine" class="river-progress" pathLength="100" d="M 1000 150 L 300 150 A 100 100 0 0 0 200 250 A 100 100 0 0 0 300 350 L 900 350 A 100 100 0 0 1 1000 450 A 100 100 0 0 1 900 550 L 300 550 A 100 100 0 0 0 200 650 A 100 100 0 0 0 300 750 L 900 750" fill="none" stroke="var(--river-light)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
-            </svg>
-
-            <!-- BARCO E ALERTA DINÂMICOS -->
-            <div class="boat-container" id="boatContainer">
-                <div class="warning-alert" id="boatAlert">
-                    ⏳ <strong>Carregando dados...</strong><br>
-                    Aguarde enquanto conectamos à base de clientes.
+                <!-- Campos de Login e Senha "Fake" conforme solicitado -->
+                <div class="fake-inputs">
+                    <div class="input-group">
+                        <label>Login</label>
+                        <input type="text" placeholder="Digite seu usuário..." autocomplete="off">
+                    </div>
+                    <div class="input-group">
+                        <label>Senha</label>
+                        <input type="password" placeholder="Digite sua senha..." autocomplete="off">
+                    </div>
                 </div>
-                <div class="boat-animator">
-                    <div class="boat-graphic" id="boatSprite">🛥️</div>
+                
+                <button class="btn-embarcar" id="loginBtn" disabled>CARREGANDO BASE...</button>
+
+                <div class="status-msg" id="statusMsg"></div>
+
+                <div class="csv-upload-container" id="csvUploadContainer">
+                    <label for="csvFileInput" class="csv-upload-btn">📄 Falha na nuvem. Carregar Planilha (CSV)</label>
+                    <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
                 </div>
             </div>
-
-            <!-- PONTOS DA ROTA -->
-            <div class="node n-start">
-                <div class="node-icon">🏁</div>
-                <div class="node-text txt-up">LARGADA</div>
-            </div>
-
-            <div class="node n1 locked-node" data-threshold="20">
-                <div class="node-icon">📄</div>
-                <div class="node-text txt-up">Sua embarcação precisa de manutenção!<br><a href="#">Encontre peças aqui</a></div>
-            </div>
-            
-            <div class="node n2 locked-node" data-threshold="35">
-                <div class="node-icon">💡</div>
-                <div class="node-text txt-left">Dicas essenciais para sua pescaria.<br><a href="#">Saiba mais</a></div>
-            </div>
-            
-            <div class="node n3 locked-node" data-threshold="60">
-                <div class="node-icon">💻</div>
-                <div class="node-text txt-right">Catálogo modo turbo e com o CARPA.<br><a href="#">Acessar</a></div>
-            </div>
-            
-            <div class="node n4 locked-node" data-threshold="85">
-                <div class="node-icon">🧰</div>
-                <div class="node-text txt-left">A ferramenta de diagnóstico ideal.<br><a href="#">Saiba mais</a></div>
-            </div>
-
-            <div class="node n-meta locked-node" data-threshold="100">
-                <div class="node-icon">🎯</div>
-                <div class="node-text txt-up"><strong>OBJETIVO BATIDO</strong><br>Você entrou no ranking, não perca a posição!</div>
-            </div>
-
-            <div class="node n-end locked-node" id="ranchoNode" data-threshold="101">
-                <div class="node-icon">🏕️</div>
-                <div class="node-text">CHEGOU NO RANCHO!<br><span id="ranchoRankingText" style="font-size: 13px; font-weight: normal;">Continue comprando!</span></div>
-            </div>
-
-        </div> 
+        </div>
     </div>
+
+    <!-- ========================================= -->
+    <!--          DASHBOARD AREA (MAPA + EXTRAS)   -->
+    <!-- ========================================= -->
+    <div id="dashboardArea">
+        
+        <header class="main-header">
+            <img src="https://blogserlider.wordpress.com/wp-content/uploads/2026/05/2cores_composto.png" alt="Pacaembu Autopeças" class="header-logo">
+            <div class="header-info">
+                
+                <!-- Pesquisa Inteligente de Alta Performance -->
+                <div class="custom-search">
+                    <span>🔍</span>
+                    <input type="text" id="clientSearchInput" placeholder="Digite seu Código..." autocomplete="off">
+                    <ul id="autocompleteList" class="autocomplete-list"></ul>
+                </div>
+                
+                <span id="clientNameDisplay">🎧 IDENTIFIQUE-SE PARA INICIAR</span>
+                <span>👤</span>
+                <button class="logout-btn" id="logoutBtn">Voltar ✖</button>
+            </div>
+        </header>
+
+        <div class="street-sign">
+            <div class="sign-pole"></div>
+            <div class="sign-board">
+                <p><span>📍</span> Você está navegando em</p>
+                <h3>Outubro</h3>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+            <div class="intro-section">
+                <img src="https://blogserlider.wordpress.com/wp-content/uploads/2026/09/logo-rota-rancho.png" alt="Rota Premiada - Rancho Pabu" class="rota-logo">
+                <div class="intro-text">
+                    <h1>Prepare sua tralha de pesca para uma experiência exclusiva! Avance com suas compras e garanta sua vaga no <strong>Rancho da Pabu</strong>. Uma experiência direto com nossa diretoria!</h1>
+                </div>
+            </div>
+
+            <div class="month-selector">
+                <p>Escolha seu mês para acompanhar o trajeto:</p>
+                <div class="month-buttons">
+                    <button class="month-btn active">Outubro</button>
+                    <button class="month-btn">Novembro</button>
+                    <button class="month-btn">Dezembro</button>
+                </div>
+            </div>
+
+            <!-- CONTAINER DO MAPA -->
+            <div class="map-container">
+                
+                <div class="progress-box">
+                    <div class="progress-box-texts">
+                        <p>Seu progresso atual:</p>
+                        <h2 id="progText">0 %</h2>
+                    </div>
+                    <div class="progress-icon" id="progIcon">🐟</div>
+                </div>
+
+                <!-- SVG do Rio -->
+                <svg class="svg-path" viewBox="0 0 1200 900">
+                    <path id="mainRiverPath" d="M 1000 150 L 300 150 A 100 100 0 0 0 200 250 A 100 100 0 0 0 300 350 L 900 350 A 100 100 0 0 1 1000 450 A 100 100 0 0 1 900 550 L 300 550 A 100 100 0 0 0 200 650 A 100 100 0 0 0 300 750 L 900 750" fill="none" stroke="var(--river-bank)" stroke-width="45" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M 1000 150 L 300 150 A 100 100 0 0 0 200 250 A 100 100 0 0 0 300 350 L 900 350 A 100 100 0 0 1 1000 450 A 100 100 0 0 1 900 550 L 300 550 A 100 100 0 0 0 200 650 A 100 100 0 0 0 300 750 L 900 750" fill="none" stroke="var(--river-empty)" stroke-width="35" stroke-linecap="round" stroke-linejoin="round"/>
+                    
+                    <path id="riverFill" class="river-progress" pathLength="100" d="M 1000 150 L 300 150 A 100 100 0 0 0 200 250 A 100 100 0 0 0 300 350 L 900 350 A 100 100 0 0 1 1000 450 A 100 100 0 0 1 900 550 L 300 550 A 100 100 0 0 0 200 650 A 100 100 0 0 0 300 750 L 900 750" fill="none" stroke="var(--river-filled)" stroke-width="35" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path id="riverShine" class="river-progress" pathLength="100" d="M 1000 150 L 300 150 A 100 100 0 0 0 200 250 A 100 100 0 0 0 300 350 L 900 350 A 100 100 0 0 1 1000 450 A 100 100 0 0 1 900 550 L 300 550 A 100 100 0 0 0 200 650 A 100 100 0 0 0 300 750 L 900 750" fill="none" stroke="var(--river-light)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+                </svg>
+
+                <div class="boat-container" id="boatContainer">
+                    <div class="warning-alert" id="boatAlert">
+                        ✅ <strong>Base Pronta!</strong><br>
+                        Digite um código no topo da tela para iniciar a rota.
+                    </div>
+                    <div class="boat-animator">
+                        <div class="boat-graphic" id="boatSprite">🛥️</div>
+                    </div>
+                </div>
+
+                <div class="node n-start">
+                    <div class="node-icon">🏁</div>
+                    <div class="node-text txt-up">LARGADA</div>
+                </div>
+                <div class="node n1 locked-node" data-threshold="20">
+                    <div class="node-icon">📄</div>
+                    <div class="node-text txt-up">Sua embarcação precisa de manutenção!<br><a href="#">Encontre peças aqui</a></div>
+                </div>
+                <div class="node n2 locked-node" data-threshold="35">
+                    <div class="node-icon">💡</div>
+                    <div class="node-text txt-left">Dicas essenciais para sua pescaria.<br><a href="#">Saiba mais</a></div>
+                </div>
+                <div class="node n3 locked-node" data-threshold="60">
+                    <div class="node-icon">💻</div>
+                    <div class="node-text txt-right">Catálogo modo turbo e com o CARPA.<br><a href="#">Acessar</a></div>
+                </div>
+                <div class="node n4 locked-node" data-threshold="85">
+                    <div class="node-icon">🧰</div>
+                    <div class="node-text txt-left">A ferramenta de diagnóstico ideal.<br><a href="#">Saiba mais</a></div>
+                </div>
+                <div class="node n-meta locked-node" data-threshold="100">
+                    <div class="node-icon">🎯</div>
+                    <div class="node-text txt-up"><strong>OBJETIVO BATIDO</strong><br>Você entrou no ranking, não perca a posição!</div>
+                </div>
+                <div class="node n-end locked-node" id="ranchoNode" data-threshold="101">
+                    <div class="node-icon">🏕️</div>
+                    <div class="node-text">CHEGOU NO RANCHO!<br><span id="ranchoRankingText" style="font-size: 13px; font-weight: normal;">Continue comprando!</span></div>
+                </div>
+
+            </div> 
+        </div>
+
+        <!-- ========================================= -->
+        <!--  SEÇÃO: FÁBRICAS PARCEIRAS (CARROSSEL)    -->
+        <!-- ========================================= -->
+        <section class="partners-section">
+            <div class="partners-container">
+                <div class="partners-title">
+                    Acelere com nossas<br><strong>fábricas parceiras</strong>
+                </div>
+                <div class="carousel-wrapper">
+                    <div class="carousel-track-container">
+                        <div class="carousel-track">
+                            <!-- GRUPO 1 DO CARROSSEL -->
+                            <ul class="partner-list">
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_rei.png" alt="REI"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_racor.png" alt="Racor"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_paraflu.png" alt="Paraflu"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_nakata.png" alt="Nakata"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_monroe.png" alt="Monroe"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_modefer.png" alt="Modefer"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_metalleve.png" alt="Metal Leve"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_mann.png" alt="Mann"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_mahle.png" alt="Mahle"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_luk.png" alt="LuK"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- GRUPO 2 DO CARROSSEL (DUPLICADO PARA LOOP PERFEITO) -->
+                            <ul class="partner-list">
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_rei.png" alt="REI"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_racor.png" alt="Racor"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_paraflu.png" alt="Paraflu"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_nakata.png" alt="Nakata"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_monroe.png" alt="Monroe"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_modefer.png" alt="Modefer"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_metalleve.png" alt="Metal Leve"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_mann.png" alt="Mann"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_mahle.png" alt="Mahle"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="partner-card">
+                                        <div class="partner-logo-box"><img src="https://blogserlider.wordpress.com/wp-content/uploads/2025/08/acelera_luk.png" alt="LuK"></div>
+                                        <div class="btn-partner">Ver Produtos</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!--  NOVA SEÇÃO: REGULAMENTO                  -->
+        <!-- ========================================= -->
+        <section class="rules-section">
+            <div class="rules-container">
+                <img src="https://blogserlider.wordpress.com/wp-content/uploads/2026/09/logo-rota-rancho.png" alt="Rota Premiada" class="rules-logo">
+                <div class="rules-text">
+                    Para saber cada detalhe da estrada,<br>
+                    <a id="btnOpenRules">leia o regulamento completo.</a>
+                </div>
+            </div>
+        </section>
+
+    </div> <!-- Fim do Dashboard Area -->
+
+    <!-- ========================================= -->
+    <!--          MODAL DE REGULAMENTO (POP-UP)    -->
+    <!-- ========================================= -->
+    <div class="modal-overlay" id="rulesModal">
+        <div class="modal-content">
+            <span class="close-modal" id="btnCloseRules">&times;</span>
+            
+            <!-- Vídeo em Looping dentro do Modal -->
+            <div class="modal-video">
+                <img src="https://blogserlider.wordpress.com/wp-content/uploads/2026/09/video-rancho-pabu-gif.gif" alt="Pescaria Pabu">
+            </div>
+
+            <div class="modal-text-content">
+                <h2>Regulamento Oficial - Rancho da Pabu</h2>
+                <div class="modal-text-body">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <p>Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam. Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi.</p>
+                    <p>Duis sapien sem, aliquet nec, commodo eget, consequat quis, neque. Aliquam faucibus, elit ut dictum aliquet, felis nisl adipiscing sapien, sed malesuada diam lacus eget erat. Cras mollis scelerisque nunc. Nullam arcu. Aliquam consequat. Curabitur augue lorem, dapibus quis, laoreet et, pretium ac, nisi. Aenean magna nisl, mollis quis, molestie eu, feugiat in, orci. In hac habitasse platea dictumst.</p>
+                    <p>Fusce convallis, mauris imperdiet gravida bibendum, nisl turpis suscipit mauris, sed placerat ipsum urna sed risus. In convallis tellus a mauris. Curabitur non elit ut libero tristique sodales. Pellentesque dictum vitae risus. Praesent mauris orci, interdum in, suscipit vitae, dictum blandit, purus.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!--          RODAPÉ OFICIAL (FOOTER)          -->
+    <!-- ========================================= -->
+    <footer class="site-footer">
+        <div class="footer-left">
+            <div class="footer-title">CANAIS DE ATENDIMENTO</div>
+            <div class="footer-bold">Televendas</div>
+            <div class="footer-text">
+                (11) 3618-5800<br>
+                Segunda à Sexta: das 08h às 18h
+            </div>
+            
+            <div class="footer-bottom-row">
+                <div class="footer-text">
+                    Fale Conosco<br>
+                    cap@pabu.com.br
+                </div>
+                
+                <div class="social-icons">
+                    <div class="social-circle">
+                        <!-- Facebook -->
+                        <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                    </div>
+                    <div class="social-circle">
+                        <!-- LinkedIn -->
+                        <svg viewBox="0 0 24 24" fill="white" width="14" height="14"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    </div>
+                    <div class="social-circle">
+                        <!-- Instagram -->
+                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <div class="footer-text">
+                Pacaembu Autopeças<br>
+                CNPJ 61.295.473/0001-58
+            </div>
+        </div>
+    </footer>
 
     <!-- JAVASCRIPT CONECTADO AO GOOGLE SHEETS -->
     <script>
+        const loginArea = document.getElementById('loginArea');
+        const dashboardArea = document.getElementById('dashboardArea');
+        
+        const loginBtn = document.getElementById('loginBtn');
+        const statusMsg = document.getElementById('statusMsg');
+        const csvUploadContainer = document.getElementById('csvUploadContainer');
+        const csvFileInput = document.getElementById('csvFileInput');
+        
+        const clientSearchInput = document.getElementById('clientSearchInput');
+        const autocompleteList = document.getElementById('autocompleteList');
+        const logoutBtn = document.getElementById('logoutBtn');
+
         const progText = document.getElementById('progText');
         const progIcon = document.getElementById('progIcon');
         const progBox = document.querySelector('.progress-box');
@@ -354,21 +797,200 @@
         const clientNameDisplay = document.getElementById('clientNameDisplay');
         const ranchoRankingText = document.getElementById('ranchoRankingText');
         const ranchoNode = document.getElementById('ranchoNode');
-        
-        const clientSelect = document.getElementById('clientSelect');
-        
+
         let clientData = []; 
-        let clientMap = {};  
+        let clientMap = {}; 
 
         // LINK PUBLICADO DO GOOGLE SHEETS
         const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSB2LcfxGsd23IE9I417OwT_B3ibupWKLzxzk_rZAYEB9q-0UK-LEYekRJ2sC0vKlFYK45yAd-uWA5C/pub?gid=0&single=true&output=csv';
 
-        // 1. ATUALIZAÇÃO DO MAPA
+        // 1. LEITOR DE CSV À PROVA DE BALAS
+        function processCSV(text) {
+            const lines = text.split('\n');
+            clientData = [];
+            clientMap = {};
+
+            let firstLine = lines[0].toLowerCase();
+            let delimiter = ';';
+            if (firstLine.includes('\t')) delimiter = '\t';
+            else if (firstLine.includes(';')) delimiter = ';';
+            else delimiter = ',';
+
+            let headers = firstLine.split(delimiter).map(h => h.trim());
+            let codeIdx = 0, pointsIdx = 1, progIdx = 2;
+
+            for(let j=0; j<headers.length; j++) {
+                if(headers[j].includes('cód') || headers[j].includes('cod')) codeIdx = j;
+                if(headers[j].includes('pontos') || headers[j].includes('realizado')) pointsIdx = j;
+                if(headers[j].includes('%') || headers[j].includes('meta') || headers[j].includes('prog')) progIdx = j;
+            }
+
+            for(let i = 1; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if(!line) continue;
+                
+                let parts = line.split(delimiter).map(p => p.replace(/['"]/g, '').trim());
+                
+                if(parts.length > Math.max(codeIdx, pointsIdx, progIdx)) {
+                    let code = parts[codeIdx];
+                    let name = "Cliente " + code;
+                    
+                    let pointsStr = parts[pointsIdx] || "0";
+                    let progStr = parts[progIdx].replace(/[%]/g, '') || "0";
+                    
+                    let points = parseFloat(pointsStr.replace(/\./g, '').replace(',', '.'));
+                    let prog = parseFloat(progStr.replace(/\./g, '').replace(',', '.'));
+                    
+                    if(!isNaN(points) && !isNaN(prog)) {
+                        clientData.push({ code, name, points, prog });
+                    }
+                }
+            }
+
+            clientData.sort((a, b) => b.points - a.points);
+            clientData.forEach((client, index) => {
+                client.rank = index + 1;
+                clientMap[client.code] = client; 
+            });
+
+            loginBtn.innerText = "EMBARCAR";
+            loginBtn.disabled = false;
+        }
+
+        // 2. CONECTAR NO GOOGLE SHEETS
+        function loadDataFromGoogleSheets() {
+            fetch(googleSheetsUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error("Falha na rede.");
+                    return response.text();
+                })
+                .then(text => {
+                    processCSV(text);
+                })
+                .catch(error => {
+                    console.error("Erro:", error);
+                    loginBtn.innerText = "Falha na Nuvem";
+                    statusMsg.style.color = 'var(--alert-red)';
+                    statusMsg.innerText = "❌ O navegador bloqueou a conexão automática.";
+                    csvUploadContainer.style.display = 'block'; 
+                });
+        }
+
+        // 3. UPLOAD MANUAL
+        csvFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                processCSV(e.target.result);
+                statusMsg.style.color = '#16a34a';
+                statusMsg.innerText = "✅ Arquivo CSV carregado com sucesso!";
+                csvUploadContainer.style.display = 'none'; 
+                setTimeout(() => { statusMsg.innerText = ""; }, 4000);
+            };
+            reader.readAsText(file);
+        });
+
+        // 4. AÇÃO DO BOTÃO "EMBARCAR" 
+        loginBtn.addEventListener('click', function() {
+            loginArea.style.opacity = '0';
+            setTimeout(() => {
+                loginArea.style.display = 'none';
+                dashboardArea.style.display = 'flex';
+                updateMap(null);
+                setTimeout(() => { dashboardArea.style.opacity = '1'; checkFooterScroll(); }, 50);
+            }, 500);
+        });
+
+        // 5. PESQUISA INTELIGENTE (Autocomplete)
+        clientSearchInput.addEventListener('input', function() {
+            let val = this.value.trim().toLowerCase();
+            autocompleteList.innerHTML = '';
+            
+            if (!val) {
+                autocompleteList.style.display = 'none';
+                return;
+            }
+            
+            let matches = 0;
+            for (let i = 0; i < clientData.length; i++) {
+                let client = clientData[i];
+                if (client.code.toLowerCase().includes(val)) {
+                    let li = document.createElement('li');
+                    li.innerHTML = `<strong>${client.code}</strong> (Pos: ${client.rank}º)`;
+                    
+                    li.addEventListener('click', function() {
+                        clientSearchInput.value = client.code;
+                        autocompleteList.style.display = 'none';
+                        updateMap(client);
+                    });
+                    
+                    autocompleteList.appendChild(li);
+                    matches++;
+                    if (matches >= 40) break;
+                }
+            }
+            
+            if (matches > 0) {
+                autocompleteList.style.display = 'block';
+            } else {
+                let li = document.createElement('li');
+                li.innerText = "❌ Nenhum cliente encontrado.";
+                li.style.color = "var(--alert-red)";
+                autocompleteList.appendChild(li);
+                autocompleteList.style.display = 'block';
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if(!e.target.closest('.custom-search')) {
+                autocompleteList.style.display = 'none';
+            }
+        });
+
+        clientSearchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                let code = this.value.trim();
+                autocompleteList.style.display = 'none';
+                
+                if (code === "") {
+                    updateMap(null);
+                    return;
+                }
+
+                if (clientMap.hasOwnProperty(code)) {
+                    updateMap(clientMap[code]);
+                } else {
+                    alert("❌ Código não encontrado.");
+                    updateMap(null); 
+                }
+            }
+        });
+
+        // 6. VOLTAR PARA TELA DE ACESSO
+        logoutBtn.addEventListener('click', function() {
+            dashboardArea.style.opacity = '0';
+            setTimeout(() => {
+                dashboardArea.style.display = 'none';
+                clientSearchInput.value = ''; 
+                loginArea.style.display = 'flex';
+                
+                riverFill.style.strokeDashoffset = 100;
+                riverShine.style.strokeDashoffset = 100;
+                boatContainer.style.left = "83.33%";
+                boatContainer.style.top = "16.66%";
+                boatSprite.style.transform = "scaleX(-1)";
+                
+                setTimeout(() => { loginArea.style.opacity = '1'; }, 50);
+            }, 500);
+        });
+
+        // 7. ATUALIZAÇÃO DO MAPA E TEXTOS
         function updateMap(client) {
             let value = client ? client.prog : 0;
             let points = client ? client.points : 0;
             let rank = client ? client.rank : "-";
-            let name = client ? client.name : "RAZÃO SOCIAL DO CLIENTE";
+            let name = client ? client.name : "IDENTIFIQUE-SE PARA INICIAR";
 
             if(client && rank <= 20 && value >= 100) {
                 ranchoRankingText.innerHTML = `<strong style="color:#facc15; font-size:18px;">🏆 ${rank}º LUGAR</strong>`;
@@ -376,12 +998,15 @@
                 ranchoRankingText.innerHTML = `Continue comprando!`;
             }
 
-            clientNameDisplay.innerHTML = `🎧 ${name}`;
+            if(client) {
+                clientNameDisplay.innerHTML = `🎧 ${name} &nbsp; | &nbsp; 🏆 RANKING: <strong>${rank}º LUGAR</strong>`;
+            } else {
+                clientNameDisplay.innerHTML = `🎧 ${name}`;
+            }
 
             let displayValue = (Math.round(value * 10) / 10);
             progText.innerText = displayValue + ' %';
             
-            // --- MATEMÁTICA DA NAVEGAÇÃO ---
             let visualProg = 0;
             const pontoDoAlvo = 88.4; 
 
@@ -389,7 +1014,7 @@
                 visualProg = (value / 100) * pontoDoAlvo; 
             } else {
                 if (rank <= 20) {
-                    visualProg = 100; // Top 20 no Rancho
+                    visualProg = 100; 
                 } else {
                     let distance = rank - 20; 
                     let extraProg = 11.0 * Math.pow(0.9, distance - 1); 
@@ -424,9 +1049,9 @@
                 }
             });
 
-            // LOGICA DOS TEXTOS
             if (!client) {
                 boatAlert.style.borderLeftColor = 'var(--locked-gray)';
+                boatAlert.innerHTML = `✅ <strong>Base Pronta!</strong><br>Digite um código no topo da tela para iniciar a rota.`;
                 progIcon.innerText = '🐟';
                 progIcon.style.background = 'var(--text-blue)';
                 progBox.style.borderBottomColor = 'var(--orange)';
@@ -439,7 +1064,6 @@
 
             if (value >= 100 && rank <= 20) {
                 ranchoNode.classList.remove('locked-node');
-                
                 progIcon.innerText = '👑';
                 progIcon.style.background = '#3b82f6';
                 progText.style.color = '#3b82f6';
@@ -457,7 +1081,6 @@
             
             } else {
                 ranchoNode.classList.add('locked-node');
-
                 let top20Client = clientData.length >= 20 ? clientData[19] : clientData[clientData.length - 1];
                 let diff = top20Client ? (top20Client.points - points) : 0;
 
@@ -484,103 +1107,52 @@
             }
         }
 
-        // 2. PROCESSA O CSV DA PLANILHA
-        function processCSV(text) {
-            const lines = text.split('\n');
-            
-            clientData = [];
-            clientMap = {};
-            clientSelect.innerHTML = '<option value="">Selecione ou digite um Código...</option>';
+        // 9. FUNCIONALIDADE DO MODAL DE REGULAMENTO
+        const modal = document.getElementById('rulesModal');
+        const btnOpen = document.getElementById('btnOpenRules');
+        const btnClose = document.getElementById('btnCloseRules');
 
-            let firstLine = lines[0] || "";
-            let delimiter = ';';
-            if (firstLine.includes('\t')) delimiter = '\t';
-            else if (firstLine.includes(';')) delimiter = ';';
-            else delimiter = ',';
+        btnOpen.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.style.opacity = '1'; }, 10);
+        });
 
-            for(let i = 1; i < lines.length; i++) {
-                let line = lines[i].trim();
-                if(!line) continue;
-                
-                let parts = line.split(delimiter);
-                
-                while(parts.length > 0 && parts[parts.length - 1].trim().replace(/['"]/g, '') === '') {
-                    parts.pop();
-                }
-                
-                if(parts.length >= 2) {
-                    let code = parts[0].replace(/['"]/g, '').trim();
-                    let name = "Cliente " + code; 
-                    
-                    if (parts.length > 2 && parts[1].replace(/['"]/g, '').trim() !== '') {
-                        name = parts[1].replace(/['"]/g, '').trim();
-                    }
-                    
-                    let progStr = parts[parts.length - 1].replace(/['"%]/g, '').trim();
-                    let pointsStr = parts[parts.length - 2] ? parts[parts.length - 2].replace(/['"]/g, '').trim() : "0";
-                    
-                    let points = parseFloat(pointsStr.replace(/\./g, '').replace(',', '.'));
-                    let prog = parseFloat(progStr.replace(/\./g, '').replace(',', '.'));
-                    
-                    if(!isNaN(points) && !isNaN(prog)) {
-                        clientData.push({ code, name, points, prog });
-                    }
-                }
-            }
+        btnClose.addEventListener('click', () => {
+            modal.style.opacity = '0';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+        });
 
-            clientData.sort((a, b) => b.points - a.points);
-            
-            clientData.forEach((client, index) => {
-                client.rank = index + 1;
-                clientMap[client.code] = client;
-                
-                let option = document.createElement('option');
-                option.value = client.code;
-                option.innerText = `${client.code} (Pos: ${client.rank}º)`;
-                clientSelect.appendChild(option);
-            });
-
-            updateMap(null);
-            
-            boatAlert.innerHTML = `✅ <strong>Base Atualizada!</strong><br>Selecione um código acima para ver a posição na Rota.`;
-            boatAlert.style.borderLeftColor = '#16a34a';
-        }
-
-        // 3. BUSCA AUTOMÁTICA DA PLANILHA
-        function loadDataFromGoogleSheets() {
-            boatAlert.style.borderLeftColor = '#facc15';
-            boatAlert.innerHTML = `⏳ <strong>Carregando dados...</strong><br>Aguarde enquanto conectamos à base de clientes.`;
-            
-            fetch(googleSheetsUrl)
-                .then(response => response.text())
-                .then(text => {
-                    processCSV(text);
-                })
-                .catch(error => {
-                    console.error("Erro ao carregar os dados:", error);
-                    boatAlert.style.borderLeftColor = 'var(--alert-red)';
-                    boatAlert.innerHTML = `❌ <strong>Erro na conexão</strong><br>Não foi possível carregar a base do Google Sheets.`;
-                });
-        }
-
-        // SELECT EVENT
-        clientSelect.addEventListener('change', function(e) {
-            let code = e.target.value.trim();
-            if (code === "") {
-                updateMap(null);
-                boatAlert.innerHTML = `✅ <strong>Base Pronta!</strong><br>Selecione um código acima para ver a posição na Rota.`;
-                boatAlert.style.borderLeftColor = '#16a34a';
-                return;
-            }
-
-            if (clientMap.hasOwnProperty(code)) {
-                updateMap(clientMap[code]);
-            } else {
-                updateMap(null); 
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.opacity = '0';
+                setTimeout(() => { modal.style.display = 'none'; }, 300);
             }
         });
 
-        // Inicia buscando na nuvem
+        // 10. PROTEÇÃO DE SCROLL (Plaquinha e Meses param no topo da faixa laranja)
+        function checkFooterScroll() {
+            const partnersSection = document.querySelector('.partners-section');
+            const sign = document.querySelector('.street-sign');
+            const monthSel = document.querySelector('.month-selector');
+            
+            if(partnersSection && sign && monthSel && dashboardArea.style.display === 'flex') {
+                const partnersTop = partnersSection.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (partnersTop < windowHeight) {
+                    let overlap = windowHeight - partnersTop;
+                    sign.style.bottom = (30 + overlap) + 'px';
+                    monthSel.style.bottom = (200 + overlap) + 'px';
+                } else {
+                    sign.style.bottom = '30px';
+                    monthSel.style.bottom = '200px';
+                }
+            }
+        }
+        window.addEventListener('scroll', checkFooterScroll);
+        window.addEventListener('resize', checkFooterScroll);
+
+        // Inicia puxando os dados do Google
         loadDataFromGoogleSheets();
     </script>
 </body>

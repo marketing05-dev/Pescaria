@@ -38,6 +38,15 @@
             background: rgba(0, 31, 68, 0.4); backdrop-filter: blur(5px); z-index: -1;
         }
 
+        /* Indicador de Última Atualização */
+        .last-update-tag {
+            position: fixed; bottom: 15px; right: 25px;
+            background: rgba(0, 0, 0, 0.6); color: rgba(255, 255, 255, 0.9);
+            padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: bold;
+            z-index: 9999; backdrop-filter: blur(4px); pointer-events: none; display: none;
+            border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
         /* ========================================= */
         /*          TELA DE ACESSO INICIAL           */
         /* ========================================= */
@@ -207,11 +216,9 @@
         .warning-alert strong { color: #facc15; }
         @keyframes pulseAlert { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.05); } }
 
-
         /* ========================================= */
-        /*    NOVAS SEÇÕES: PARCEIROS E REGULAMENTO  */
+        /*  SEÇÃO: FÁBRICAS PARCEIRAS (CARROSSEL)    */
         /* ========================================= */
-        
         .partners-section {
             background-color: var(--orange); width: 100%; padding: 40px 20px;
             display: flex; justify-content: center; z-index: 10; position: relative;
@@ -225,22 +232,16 @@
         }
         .partners-title strong { font-size: 28px; display: block;}
         
-        /* Carrossel CSS Animation (Infinito) */
         .carousel-wrapper {
             flex: 1; display: flex; align-items: center; overflow: hidden;
             -webkit-mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
             mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
         }
-        .carousel-track-container {
-            overflow: hidden; width: 100%;
-        }
+        .carousel-track-container { overflow: hidden; width: 100%; }
         .carousel-track {
-            display: flex; width: max-content;
-            animation: scrollLoop 35s linear infinite;
+            display: flex; width: max-content; animation: scrollLoop 35s linear infinite;
         }
-        .carousel-track:hover {
-            animation-play-state: paused;
-        }
+        .carousel-track:hover { animation-play-state: paused; }
         .partner-list {
             display: flex; gap: 20px; list-style: none; padding: 10px 0; margin: 0; padding-right: 20px;
         }
@@ -266,6 +267,9 @@
         }
         .partner-card:hover .btn-partner { background: var(--text-blue); color: var(--white); }
 
+        /* ========================================= */
+        /*  SEÇÃO: REGULAMENTO                       */
+        /* ========================================= */
         .rules-section {
             background-color: transparent; width: 100%; padding: 60px 20px; display: flex; 
             justify-content: center; z-index: 10; position: relative;
@@ -324,6 +328,8 @@
         /*          RESPONSIVIDADE (CELULAR)         */
         /* ========================================= */
         @media (max-width: 1024px) {
+            .last-update-tag { bottom: 10px; right: 10px; font-size: 9px; padding: 5px 10px;}
+            
             .login-box { flex-direction: column; width: 95%; max-height: none;}
             .login-left { padding: 30px 20px; }
             .login-logo { width: 160px; margin-bottom: 10px;}
@@ -365,7 +371,6 @@
 
             .warning-alert { width: 180px; font-size: 10px; padding: 8px; margin-bottom: 20px;}
 
-            /* Ajustes Mobile Parceiros e Regras */
             .partners-container { flex-direction: column; text-align: center; gap: 20px; }
             .partners-title { text-align: center; }
             .rules-container { flex-direction: column; text-align: center; gap: 20px; }
@@ -373,9 +378,8 @@
             .rules-text { font-size: 18px; }
 
             .modal-content { flex-direction: column; padding: 20px; }
-            .modal-video { display: none; /* Esconde vídeo no celular para economizar espaço */ }
+            .modal-video { display: none; }
 
-            /* Rodapé Mobile */
             .site-footer { flex-direction: column; align-items: center; text-align: center; gap: 30px; padding: 30px 20px; }
             .footer-left { align-items: center; }
             .footer-bottom-row { flex-direction: column; align-items: center; gap: 20px;}
@@ -385,9 +389,12 @@
 </head>
 <body>
 
-    <!-- Fundo de vídeo fixo com máscara mais leve (0.4) -->
+    <!-- Fundo de vídeo fixo com máscara leve (0.4) -->
     <div class="video-bg"></div>
     <div class="overlay"></div>
+
+    <!-- Indicador Flutuante de Última Atualização -->
+    <div class="last-update-tag" id="lastUpdateTag">Última atualização: --/--/---- --:--</div>
 
     <!-- ========================================= -->
     <!--          TELA DE ACESSO INICIAL           -->
@@ -411,7 +418,7 @@
                 <h2>Bem-vindo à Rota!</h2>
                 <p>O painel oficial de acompanhamento da campanha Rancho da Pabu.</p>
                 
-                <!-- Campos de Login e Senha "Fake" conforme solicitado -->
+                <!-- Campos de Login e Senha "Fake" -->
                 <div class="fake-inputs">
                     <div class="input-group">
                         <label>Login</label>
@@ -444,7 +451,6 @@
             <img src="https://blogserlider.wordpress.com/wp-content/uploads/2026/05/2cores_composto.png" alt="Pacaembu Autopeças" class="header-logo">
             <div class="header-info">
                 
-                <!-- Pesquisa Inteligente de Alta Performance -->
                 <div class="custom-search">
                     <span>🔍</span>
                     <input type="text" id="clientSearchInput" placeholder="Digite seu Código..." autocomplete="off">
@@ -494,7 +500,6 @@
                     <div class="progress-icon" id="progIcon">🐟</div>
                 </div>
 
-                <!-- SVG do Rio -->
                 <svg class="svg-path" viewBox="0 0 1200 900">
                     <path id="mainRiverPath" d="M 1000 150 L 300 150 A 100 100 0 0 0 200 250 A 100 100 0 0 0 300 350 L 900 350 A 100 100 0 0 1 1000 450 A 100 100 0 0 1 900 550 L 300 550 A 100 100 0 0 0 200 650 A 100 100 0 0 0 300 750 L 900 750" fill="none" stroke="var(--river-bank)" stroke-width="45" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M 1000 150 L 300 150 A 100 100 0 0 0 200 250 A 100 100 0 0 0 300 350 L 900 350 A 100 100 0 0 1 1000 450 A 100 100 0 0 1 900 550 L 300 550 A 100 100 0 0 0 200 650 A 100 100 0 0 0 300 750 L 900 750" fill="none" stroke="var(--river-empty)" stroke-width="35" stroke-linecap="round" stroke-linejoin="round"/>
@@ -695,7 +700,7 @@
             <div class="rules-container">
                 <img src="https://blogserlider.wordpress.com/wp-content/uploads/2026/09/logo-rota-rancho.png" alt="Rota Premiada" class="rules-logo">
                 <div class="rules-text">
-                    Para saber cada detalhe da estrada,<br>
+                    Para saber cada detalhe da estrada,
                     <a id="btnOpenRules">leia o regulamento completo.</a>
                 </div>
             </div>
@@ -747,15 +752,12 @@
                 
                 <div class="social-icons">
                     <div class="social-circle">
-                        <!-- Facebook -->
                         <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
                     </div>
                     <div class="social-circle">
-                        <!-- LinkedIn -->
                         <svg viewBox="0 0 24 24" fill="white" width="14" height="14"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                     </div>
                     <div class="social-circle">
-                        <!-- Instagram -->
                         <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                     </div>
                 </div>
@@ -803,6 +805,14 @@
 
         // LINK PUBLICADO DO GOOGLE SHEETS
         const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSB2LcfxGsd23IE9I417OwT_B3ibupWKLzxzk_rZAYEB9q-0UK-LEYekRJ2sC0vKlFYK45yAd-uWA5C/pub?gid=0&single=true&output=csv';
+
+        // 0. ATUALIZAR TAG DE "ÚLTIMA ATUALIZAÇÃO"
+        function updateTimestamp() {
+            const now = new Date();
+            const tag = document.getElementById('lastUpdateTag');
+            tag.innerText = `Última atualização: ${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}`;
+            tag.style.display = 'block';
+        }
 
         // 1. LEITOR DE CSV À PROVA DE BALAS
         function processCSV(text) {
@@ -855,11 +865,15 @@
 
             loginBtn.innerText = "EMBARCAR";
             loginBtn.disabled = false;
+            updateTimestamp();
         }
 
-        // 2. CONECTAR NO GOOGLE SHEETS
+        // 2. CONECTAR NO GOOGLE SHEETS COM "CACHE-BUSTER"
         function loadDataFromGoogleSheets() {
-            fetch(googleSheetsUrl)
+            // Adiciona um timestamp no link para forçar o navegador a buscar a base nova e não ler do cache
+            const noCacheUrl = googleSheetsUrl + '&_t=' + new Date().getTime();
+
+            fetch(noCacheUrl, { cache: 'no-store' })
                 .then(response => {
                     if (!response.ok) throw new Error("Falha na rede.");
                     return response.text();
